@@ -1,0 +1,77 @@
+{
+	"compiler": {
+		"version": "0.8.18+commit.87f61d96"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_timeLock",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "test",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "timeLock",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"Timelock/TimeLock.sol": "TestTimeLock"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"Timelock/TimeLock.sol": {
+			"keccak256": "0xa6ac1ba9c81510bbe17ad75ef9737bc5e4750cadd4bf254d2bcd4d53b73bbe8e",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d3e20c9a03b028ad543dd8f56b5ce8ad19e0b6729fdfe12c859dfe652bbe3ee0",
+				"dweb:/ipfs/QmNxBYHTKLWN1B8dujf4hKg7f1kvdcwVBPe71VJdB2gQKp"
+			]
+		}
+	},
+	"version": 1
+}

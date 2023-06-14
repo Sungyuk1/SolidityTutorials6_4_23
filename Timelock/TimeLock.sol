@@ -19,6 +19,18 @@ contract TimeLock{
     error AlreadyQueuedError(bytes32 txId);
     error TimestampNotInRangeError(uint blockTimestamp, uint timestamp);
     error NotQueuedError(bytes32 txId);
+    error TimestampNotPassedError(uint blockTimestamp, uint timestamp);
+    error TimestampExpiredError(uint blockTimestamp, uint expiresAt);
+    error TxFailedError();
+
+    event Execute( 
+        bytes32 indexed txId,
+        address _target,
+        uint value, 
+        string _func,
+        bytes _data,
+        uint _timestamp);
+
 
     event Queue( 
         bytes32 indexed txId,
@@ -28,9 +40,12 @@ contract TimeLock{
         bytes _data,
         uint _timestamp);
 
+    event Cancel(bytes32 indexed txId);
+
     //using 10 seconds since we do not have to wait several days to test this code
     uint public constant MIN_DELAY = 10;
     uint public constant MAX_DELAY = 1000;
+    uint public constant GRACE_PERIOD = 1000;
 
     address public s_owner;
 
@@ -104,27 +119,47 @@ contract TimeLock{
             if (!m_queued[txId]){
                 revert NotQueuedError(txId);
             }
-
-
+            if (block.timestamp < _timestamp){
+                revert TimestampNotPassedError(block.timestamp, _timestamp);
+            }
             //check that time is greater than timeStamp
-
+            if(block.timestamp > _timestamp + GRACE_PERIOD){
+                revert TimestampExpiredError(block.timestamp, _timestamp + GRACE_PERIOD);
+            }
             //execute the tx
+            bytes memory data;
+            if (bytes(_func).length > 0){
+                data = abi.encodePacked(
+                    //compute function selector
+                    bytes4(keccak256(bytes(_func))),
+                    _data
+                );
+            }else{
+                data = _data;
+            }
+            (bool ok, bytes memory res)=_target.call{value: _value}(data);
+            if (!ok){
+                //revert if the target.call fails
+                revert TxFailedError();
+            }
+
+            emit Execute(txId, _target, _value, _func, _data, _timestamp);
 
             //delete tx from queue
+            m_queued[txId] = false;
 
+
+            return res;
+        }
+
+        function cancel(bytes32 _txId) external onlyOwner {
+            if (!m_queued[_txId]){
+                revert NotQueuedError(_txId);
+            }
+
+            m_queued[_txId] = false;
+            emit Cancel(_txId);
 
         }
 
-}
-
-contract TestTimeLock{
-    address public timeLock;
-
-    constructor (address _timeLock){
-        timeLock = _timeLock;
-    }
-
-    function test() external{
-        require(msg.sender == timeLock);
-    }
 }
