@@ -1,0 +1,3 @@
+This is an Escrow contract, however while the eth is sitting in escrow it is put into aave and earns interst. 
+When the arbiter sends the eth over to the beneficiary, the beneficiary gets acess to the original deposit,
+while the interest earned while sitting in the contract is given to the depositor. 
