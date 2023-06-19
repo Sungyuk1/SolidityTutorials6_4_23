@@ -1,0 +1,1 @@
+A tutorial from Chainshot on how to make escrow contracts which takes in dai and earns interest on Aave on that dai while the dai sits in escrow. 
